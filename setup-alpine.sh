@@ -19,6 +19,17 @@ apk upgrade
 echo "Installing packages..."
 apk add docker docker-compose curl openssh git
 
+# Enable IP forwarding permanently
+echo "Enabling IP forwarding..."
+cat >> /etc/sysctl.conf << 'EOF'
+
+# Enable IP forwarding for router functionality
+net.ipv4.ip_forward = 1
+net.ipv4.conf.all.forwarding = 1
+EOF
+
+sysctl -p
+
 # Enable and start Docker
 echo "Enabling Docker..."
 rc-update add docker boot

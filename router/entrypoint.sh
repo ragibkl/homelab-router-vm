@@ -11,11 +11,6 @@ LAN_IF=$(ip -o link show | awk -F': ' '{print $2}' | grep -v "lo\|docker\|${WAN_
 echo "Detected WAN interface: ${WAN_IF}"
 echo "Detected LAN interface: ${LAN_IF}"
 
-# Enable IP forwarding
-echo "Enabling IP forwarding..."
-sysctl -w net.ipv4.ip_forward=1
-sysctl -w net.ipv4.conf.all.forwarding=1
-
 # Flush existing rules
 echo "Setting up NAT rules..."
 iptables -t nat -F
