@@ -1,6 +1,6 @@
 #!/bin/sh
 
-GITHUB_USERNAME=${1:-ragibkl}
+GITHUB_USERNAME=ragibkl
 CACHE_FILE="/root/.ssh/github-keys.txt"
 CACHE_DURATION=3600
 
