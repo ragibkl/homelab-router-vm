@@ -31,7 +31,6 @@ services:
   # Optional: WireGuard VPN (uncomment when ready to test)
   # wireguard:
   #   image: linuxserver/wireguard
-  #   container_name: wireguard
   #   network_mode: host
   #   cap_add:
   #     - NET_ADMIN
