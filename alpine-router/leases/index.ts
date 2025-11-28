@@ -82,8 +82,7 @@ function formatLeasesText(leases: Lease[]): string {
 }
 
 const server = Bun.serve({
-  port: 3000,
-  //   hostname: "192.168.200.1",
+  port: 80,
   routes: {
     "/api/leases": async () => {
       const leases = await parseLeases();
@@ -105,4 +104,4 @@ const server = Bun.serve({
   },
 });
 
-console.log(`🚀 Leases server running on http://192.168.200.1:${server.port}`);
+console.log(`🚀 Leases server running on port: ${server.port}`);
