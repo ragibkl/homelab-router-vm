@@ -3,7 +3,6 @@ version: '3'
 services:
   router:
     build: ./router
-    container_name: router
     network_mode: host
     cap_add:
       - NET_ADMIN
@@ -12,7 +11,6 @@ services:
 
   dnsmasq:
     image: jpillora/dnsmasq
-    container_name: dnsmasq
     network_mode: host
     cap_add:
       - NET_ADMIN
