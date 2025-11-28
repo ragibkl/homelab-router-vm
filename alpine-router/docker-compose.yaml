@@ -9,11 +9,6 @@ services:
       - NET_ADMIN
       - NET_RAW
     restart: unless-stopped
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
 
   dnsmasq:
     image: jpillora/dnsmasq
@@ -26,11 +21,16 @@ services:
     depends_on:
       - router
     restart: unless-stopped
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
+
+  frpc:
+    image: snowdreamtech/frpc:0.65
+    network_mode: host
+    volumes:
+      - ./frpc/frpc.toml:/etc/frp/frpc.toml:ro
+    depends_on:
+      - router
+    restart: unless-stopped
+    env_file: .env
 
   # Optional: WireGuard VPN (uncomment when ready to test)
   # wireguard:

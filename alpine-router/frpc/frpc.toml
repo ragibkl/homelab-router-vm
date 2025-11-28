@@ -1,7 +1,7 @@
-serverAddr = "{{ .Envs.SERVER_ADDR }}"
+serverAddr = "{{ .Envs.FRP_SERVER_ADDR }}"
 serverPort = 7001
 auth.method = "token"
-auth.token = "{{ .Envs.AUTH_TOKEN }}"
+auth.token = "{{ .Envs.FRP_AUTH_TOKEN }}"
 
 [[proxies]]
 name = "tcp22"
