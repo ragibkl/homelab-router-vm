@@ -17,7 +17,7 @@ apk upgrade
 
 # Install required packages
 echo "Installing packages..."
-apk add docker docker-compose curl openssh git wget qemu-guest-agent cloud-init
+apk add docker docker-compose curl openssh git wget qemu-guest-agent
 
 # Enable qemu-guest-agent
 rc-update add qemu-guest-agent default
