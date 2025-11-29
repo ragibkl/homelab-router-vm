@@ -31,13 +31,13 @@ iptables -P OUTPUT ACCEPT
 # Allow established/related connections
 iptables -A FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
 
-# Allow LAN to WAN (internet access)
-echo "Allowing LAN → WAN traffic..."
-iptables -A FORWARD -i ${LAN_IF} -o ${WAN_IF} -j ACCEPT
-
-# Block LAN to home network
+# CRITICAL: Block LAN to home network FIRST (before general LAN→WAN allow)
 echo "Blocking LAN → home network (${WAN_NETWORK})..."
 iptables -A FORWARD -i ${LAN_IF} -d ${WAN_NETWORK} -j DROP
+
+# Allow LAN to WAN (internet access) - this comes AFTER the block
+echo "Allowing LAN → WAN (internet) traffic..."
+iptables -A FORWARD -i ${LAN_IF} -o ${WAN_IF} -j ACCEPT
 
 # NAT for LAN to internet
 echo "Setting up NAT..."
