@@ -6,8 +6,7 @@ services:
       - MKNOD
       - SYS_MODULE
     image: kylemanna/openvpn
-    ports:
-      - "1194:1194/udp"
+    network_mode: host
     restart: always
     volumes:
       - ./openvpn-data/conf:/etc/openvpn
@@ -18,6 +17,7 @@ services:
 
   frpc:
     image: snowdreamtech/frpc:0.65
+    network_mode: host
     volumes:
       - ./frpc/frpc.toml:/etc/frp/frpc.toml:ro
     restart: unless-stopped
