@@ -13,7 +13,5 @@ services:
     image: snowdreamtech/frpc:0.65
     volumes:
       - ./frpc/frpc.toml:/etc/frp/frpc.toml:ro
-    depends_on:
-      - router
     restart: unless-stopped
     env_file: .env
