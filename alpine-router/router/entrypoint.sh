@@ -101,4 +101,14 @@ echo "=== FORWARD Rules ==="
 iptables -L FORWARD -v -n --line-numbers
 echo ""
 echo "=== NAT POSTROUTING Rules ==="
-iptables -t nat
+iptables -t nat -L POSTROUTING -v -n --line-numbers
+echo ""
+echo "=== INPUT Rules ==="
+iptables -L INPUT -v -n --line-numbers
+echo ""
+
+# Keep container running
+echo "Router is running. To view blocked traffic, run:"
+echo "  docker exec <container> dmesg | grep BLOCKED-HOME"
+echo ""
+tail -f /dev/null
