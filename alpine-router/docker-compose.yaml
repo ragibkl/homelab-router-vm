@@ -19,44 +19,5 @@ services:
       - router
     restart: unless-stopped
 
-  frpc:
-    image: snowdreamtech/frpc:0.65
-    network_mode: host
-    volumes:
-      - ./frpc/frpc.toml:/etc/frp/frpc.toml:ro
-    depends_on:
-      - router
-    restart: unless-stopped
-    env_file: .env
-
-  leases:
-    build: ./leases
-    network_mode: host
-    volumes:
-      - dnsmasq-misc:/app/data
-
-  # Optional: WireGuard VPN (uncomment when ready to test)
-  # wireguard:
-  #   image: linuxserver/wireguard
-  #   network_mode: host
-  #   cap_add:
-  #     - NET_ADMIN
-  #     - SYS_MODULE
-  #   environment:
-  #     - PUID=1000
-  #     - PGID=1000
-  #     - TZ=Asia/Kuala_Lumpur
-  #     - SERVERURL=auto  # or your public IP/domain
-  #     - SERVERPORT=51820
-  #     - PEERS=laptop,phone
-  #     - PEERDNS=192.168.100.1
-  #     - INTERNAL_SUBNET=10.13.13.0/24
-  #     - ALLOWEDIPS=192.168.100.0/24
-  #   volumes:
-  #     - ./wireguard:/config
-  #   ports:
-  #     - 51820:51820/udp
-  #   restart: unless-stopped
-
 volumes:
   dnsmasq-misc:
