@@ -25,3 +25,12 @@ rc-service iscsid start
 
 # Enable Linux mount propagation
 mount --make-rshared /
+
+# Make it persistent
+cat >> /etc/local.d/shared-mounts.start <<'EOF'
+#!/bin/sh
+mount --make-rshared /
+EOF
+
+chmod +x /etc/local.d/shared-mounts.start
+rc-update add local
