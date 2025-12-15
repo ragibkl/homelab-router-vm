@@ -17,7 +17,7 @@ apk upgrade
 
 # Install required packages
 echo "Installing packages..."
-apk add docker docker-compose curl openssh git wget qemu-guest-agent
+apk add docker docker-compose curl openssh git wget qemu-guest-agent chrony
 
 # Enable qemu-guest-agent
 rc-update add qemu-guest-agent default
@@ -42,3 +42,7 @@ cp ./sshd_config_common.conf /etc/ssh/sshd_config.d/00_common.conf
 # Enable and restart SSH
 rc-update add sshd boot
 rc-service sshd restart
+
+# Enable and restart chrony
+rc-update add chronyd boot
+rc-service chronyd start
