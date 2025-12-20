@@ -85,12 +85,16 @@ echo "Setting up port forwards..."
 # Format: external_port:protocol:internal_ip:internal_port
 # Example: PORT_FORWARDS="1194:udp:10.15.1.100:1194,80:tcp:10.15.1.101:8080"
 if [ -n "$PORT_FORWARDS" ]; then
-    # Split by comma
-    IFS=',' read -ra FORWARDS <<< "$PORT_FORWARDS"
-    
-    for forward in "${FORWARDS[@]}"; do
-        # Split by colon: external_port:protocol:internal_ip:internal_port
-        IFS=':' read -r external_port protocol internal_ip internal_port <<< "$forward"
+    # Process each forward (split by comma)
+    echo "$PORT_FORWARDS" | tr ',' '\n' | while read -r forward; do
+        # Skip empty lines
+        [ -z "$forward" ] && continue
+        
+        # Parse fields: external_port:protocol:internal_ip:internal_port
+        external_port=$(echo "$forward" | cut -d: -f1)
+        protocol=$(echo "$forward" | cut -d: -f2)
+        internal_ip=$(echo "$forward" | cut -d: -f3)
+        internal_port=$(echo "$forward" | cut -d: -f4)
         
         # Validate protocol
         if [ "$protocol" != "tcp" ] && [ "$protocol" != "udp" ]; then
@@ -98,20 +102,20 @@ if [ -n "$PORT_FORWARDS" ]; then
             continue
         fi
         
-        # Validate we have all required fields
+        # Validate we have all fields
         if [ -z "$external_port" ] || [ -z "$protocol" ] || [ -z "$internal_ip" ] || [ -z "$internal_port" ]; then
             echo "WARNING: Invalid format '$forward', skipping"
             continue
         fi
         
         # Add DNAT rule
-        iptables -t nat -A PREROUTING -i ${WAN_IF} -p $protocol --dport $external_port \
+        iptables -t nat -A PREROUTING -i ${WAN_IF} -p ${protocol} --dport ${external_port} \
             -j DNAT --to-destination ${internal_ip}:${internal_port}
         
         # Allow forwarded traffic
-        iptables -A FORWARD -i ${WAN_IF} -p $protocol -d $internal_ip --dport $internal_port -j ACCEPT
+        iptables -A FORWARD -i ${WAN_IF} -p ${protocol} -d ${internal_ip} --dport ${internal_port} -j ACCEPT
         
-        echo "  ✓ WAN:$external_port/$protocol -> ${internal_ip}:${internal_port}"
+        echo "  ✓ WAN:${external_port}/${protocol} -> ${internal_ip}:${internal_port}"
     done
 else
     echo "  No port forwards configured"
