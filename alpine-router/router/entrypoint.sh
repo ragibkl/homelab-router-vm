@@ -79,6 +79,13 @@ iptables -A FORWARD -i ${LAN_IF} -o ${WAN_IF} -j ACCEPT
 echo "Setting up NAT..."
 iptables -t nat -A POSTROUTING -s ${LAN_NETWORK} -o ${WAN_IF} -j MASQUERADE
 
+echo "Setting up port forwards..."
+# Allow OpenVPN on router itself (WAN interface)
+TRANSMISSION_IP="10.15.1.157"
+TRANSMISSION_PORT=1194
+iptables -t nat -A PREROUTING -i ${WAN_IF} -p udp --dport ${TRANSMISSION_PORT} -j DNAT --to-destination ${TRANSMISSION_IP}:${TRANSMISSION_PORT}
+iptables -A FORWARD -i ${WAN_IF} -p udp -d ${TRANSMISSION_IP} --dport ${TRANSMISSION_PORT} -j ACCEPT
+
 # Block WAN → LAN (no inbound connections)
 iptables -A FORWARD -i ${WAN_IF} -o ${LAN_IF} -j DROP
 

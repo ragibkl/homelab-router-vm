@@ -6,6 +6,8 @@ services:
       - NET_ADMIN
       - NET_RAW
     restart: unless-stopped
+    env_file:
+      - .env
 
   dnsmasq:
     image: jpillora/dnsmasq
