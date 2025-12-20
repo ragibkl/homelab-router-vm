@@ -1,18 +1,33 @@
 services:
   ddns:
     image: curlimages/curl:latest
-    container_name: ddns-updater
     restart: unless-stopped
     env_file: .env
     command: >
       sh -c '
       while true; do
         echo "$$(date): Updating DDNS for vmbr0.ingress.ragib.dev..."
-        if curl -f "$$UPDATE_URL"; then
-          echo "$$(date): Update successful"
-        else
-          echo "$$(date): Update failed"
+        
+        # Update IPv4
+        if [ -n "$$UPDATE_URL_IPV4" ]; then
+          echo "  Updating IPv4..."
+          if curl -4 -f "$$UPDATE_URL_IPV4"; then
+            echo "  ✓ IPv4 update successful"
+          else
+            echo "  ✗ IPv4 update failed"
+          fi
         fi
+        
+        # Update IPv6
+        if [ -n "$$UPDATE_URL_IPV6" ]; then
+          echo "  Updating IPv6..."
+          if curl -6 -f "$$UPDATE_URL_IPV6"; then
+            echo "  ✓ IPv6 update successful"
+          else
+            echo "  ✗ IPv6 update failed"
+          fi
+        fi
+        
         echo "$$(date): Sleeping $$UPDATE_INTERVAL seconds..."
         sleep $$UPDATE_INTERVAL
       done
